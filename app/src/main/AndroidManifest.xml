@@ -17,7 +17,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".service.RedPacketService"
+
+        <service
+            android:name=".service.RedPacketService"
             android:enabled="true"
             android:exported="true"
             android:label="@string/app_name"

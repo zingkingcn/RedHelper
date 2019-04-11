@@ -21,6 +21,8 @@ import android.widget.RemoteViews;
 import com.zingking.redhelper.service.RedPacketService;
 
 public class MainActivity extends Activity {
+    // https://www.cnblogs.com/roccheung/p/5797270.html
+    // https://www.cnblogs.com/huolongluo/p/6120946.html
     private static final String TAG = "MainActivity";
     ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -35,8 +37,6 @@ public class MainActivity extends Activity {
         }
     };
     private Button btnStart;
-    private Notification notification;
-    private NotificationManager nm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +48,9 @@ public class MainActivity extends Activity {
 
     private void setListener() {
         btnStart.setOnClickListener(v -> {
+            initNotificationBar();
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             startActivity(intent);
-            initNotificationBar();
             bindService(new Intent(this, RedPacketService.class), connection, Service.BIND_AUTO_CREATE);
         });
     }
@@ -61,64 +61,26 @@ public class MainActivity extends Activity {
 
 
     public void initNotificationBar() {
-        String service = Context.NOTIFICATION_SERVICE;
-        nm = (NotificationManager) getSystemService(service); // get system
-
-        notification = new Notification();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setSmallIcon(R.drawable.ic_launcher_background)
+                .setAutoCancel(false)
+                .setContentText("通知消息")
+                .setContentTitle("通知标题");
+        Notification notification = builder.build();
         //初始化通知
-        notification.icon = R.mipmap.ic_launcher;
-        RemoteViews contentView = new RemoteViews(getPackageName(),
-                R.layout.activity_main_1);
-        notification.contentView = contentView;
-//
-//        Intent intentPlay = new Intent("play");//新建意图，并设置action标记为"play"，用于接收广播时过滤意图信息
-//        PendingIntent pIntentPlay = PendingIntent.getBroadcast(this, 0,
-//                intentPlay, 0);
-//        contentView.setOnClickPendingIntent(R.id.bt_notic_play, pIntentPlay);//为play控件注册事件
-//
-//        Intent intentPause = new Intent("pause");
-//        PendingIntent pIntentPause = PendingIntent.getBroadcast(this, 0,
-//                intentPause, 0);
-//        contentView.setOnClickPendingIntent(R.id.bt_notic_pause, pIntentPause);
-//
-//        Intent intentNext = new Intent("next");
-//        PendingIntent pIntentNext = PendingIntent.getBroadcast(this, 0,
-//                intentNext, 0);
-//        contentView.setOnClickPendingIntent(R.id.bt_notic_next, pIntentNext);
-//
-//        Intent intentLast = new Intent("last");
-//        PendingIntent pIntentLast = PendingIntent.getBroadcast(this, 0,
-//                intentLast, 0);
-//        contentView.setOnClickPendingIntent(R.id.bt_notic_last, pIntentLast);
-//
-//        Intent intentCancel = new Intent("cancel");
-//        PendingIntent pIntentCancel = PendingIntent.getBroadcast(this, 0,
-//                intentCancel, 0);
-//        contentView
-//                .setOnClickPendingIntent(R.id.bt_notic_cancel, pIntentCancel);
-
-
-
-
-
+//        notification.icon = R.mipmap.ic_launcher;
+//        RemoteViews contentView = new RemoteViews(getPackageName(),
+//                R.layout.activity_main_1);
+//        notification.contentView = contentView;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    "com.zingking.redhelper",
-                    TAG,
-                    NotificationManager.IMPORTANCE_DEFAULT
-
-            );
-
-            nm.createNotificationChannel(channel);
-
+            NotificationChannel channel = new NotificationChannel("com.zingking.redhelper",
+                    TAG, NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+            builder.setChannelId("com.zingking.redhelper");
         }
-
-
-
-
         notification.flags = notification.FLAG_NO_CLEAR;//设置通知点击或滑动时不被清除
-        nm.notify(1, notification);//开启通知
-
+        notificationManager.notify(1, notification);//开启通知
     }
 
 }

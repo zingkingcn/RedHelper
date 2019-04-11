@@ -20,8 +20,6 @@ class RedPacketService : AccessibilityService() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         Log.i(TAG, "onAccessibilityEvent = " + event)
-
-
         event?.let {
             val packageName: String = event.packageName.toString()
             val eventType: Int = event.eventType
@@ -38,6 +36,7 @@ class RedPacketService : AccessibilityService() {
                                         pendingIntent.send()
                                         Log.i(TAG, "打开微信")
                                     }
+                                    break
                                 }
                             }
                         }
@@ -45,7 +44,7 @@ class RedPacketService : AccessibilityService() {
                             val className = event.className.toString()
                             when (className) {
                                 "com.tencent.mm.ui.LauncherUI" -> {
-                                    Log.i(TAG, "打开微信")
+                                    Log.i(TAG, "点击红包")
                                     clickPacket(rootInActiveWindow)
                                 }
 //                                com.tencent.mm/.plugin.luckymoney.ui.LuckyMoneyNotHookReceiveUI
