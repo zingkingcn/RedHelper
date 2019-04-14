@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">RedHelper</string>
+    <string name="app_name">红包助手</string>
     <string name="desc">开启此功能后，可通过监听系统通知，通知中若有红包消息则自动抢红包</string>
 </resources>

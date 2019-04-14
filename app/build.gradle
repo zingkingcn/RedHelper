@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
@@ -7,7 +9,7 @@ android {
         applicationId "com.zingking.redhelper"
         minSdkVersion 18
         targetSdkVersion 27
-        versionCode 1
+        versionCode 2
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -31,7 +33,18 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+    compile 'com.github.zcweng:switch-button:0.0.3@aar'
 }
 repositories {
     mavenCentral()
+}
+
+android.applicationVariants.all { variant ->
+//    if (variant.buildType.name == 'release') {
+        def time = new SimpleDateFormat("yyyyMMddHHmm").format(System.currentTimeMillis())
+        variant.outputs.each { output ->
+            output.outputFileName = "RedHelper.V${versionName}_VC${versionCode}_${time}_${variant.buildType.name}.apk"
+        }
+//    }
 }

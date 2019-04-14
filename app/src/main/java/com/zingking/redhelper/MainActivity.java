@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,10 +13,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.view.View;
 import android.widget.Button;
-import android.widget.RemoteViews;
 
+import com.suke.widget.SwitchButton;
+import com.zingking.redhelper.appinfo.PackageInfoHelper;
+import com.zingking.redhelper.appinfo.WechatPackageInfo;
 import com.zingking.redhelper.service.RedPacketService;
 
 public class MainActivity extends Activity {
@@ -28,7 +28,6 @@ public class MainActivity extends Activity {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
 
-
         }
 
         @Override
@@ -37,6 +36,8 @@ public class MainActivity extends Activity {
         }
     };
     private Button btnStart;
+    private SwitchButton swWechat;
+    private WechatPackageInfo wechatPackageInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,12 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         initView();
         setListener();
+        wechatPackageInfo = new WechatPackageInfo();
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(false);
     }
 
     private void setListener() {
@@ -53,17 +60,27 @@ public class MainActivity extends Activity {
             startActivity(intent);
             bindService(new Intent(this, RedPacketService.class), connection, Service.BIND_AUTO_CREATE);
         });
+        swWechat.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                if (isChecked) {
+                    PackageInfoHelper.Companion.getInstance().addPackageInfo(RedHelper.WECHAT_PACKAGE_NAME, wechatPackageInfo);
+                } else {
+                    PackageInfoHelper.Companion.getInstance().removePackageInfo(RedHelper.WECHAT_PACKAGE_NAME);
+                }
+            }
+        });
     }
 
     private void initView() {
         btnStart = (Button) findViewById(R.id.btn_start);
+        swWechat = (SwitchButton) findViewById(R.id.sw_wechat);
     }
-
 
     public void initNotificationBar() {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         Notification.Builder builder = new Notification.Builder(this);
-        builder.setSmallIcon(R.drawable.ic_launcher_background)
+        builder.setSmallIcon(R.mipmap.logo3)
                 .setAutoCancel(false)
                 .setContentText("通知消息")
                 .setContentTitle("通知标题");
@@ -81,6 +98,7 @@ public class MainActivity extends Activity {
         }
         notification.flags = notification.FLAG_NO_CLEAR;//设置通知点击或滑动时不被清除
         notificationManager.notify(1, notification);//开启通知
+
     }
 
 }
