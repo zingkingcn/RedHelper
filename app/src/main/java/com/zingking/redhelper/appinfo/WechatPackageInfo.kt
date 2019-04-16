@@ -56,6 +56,7 @@ class WechatPackageInfo : IPackageInfo {
     }
 
     private fun clickPacket(redPacket: AccessibilityNodeInfo) {
+        Log.i(TAG, "clickPacket -> " + "点击红包")
         redPacket.performAction(AccessibilityNodeInfo.ACTION_CLICK)
         val message = Message.obtain()
         message.what = SCREEN_LOCK_CLICK_TAG
@@ -104,7 +105,7 @@ class WechatPackageInfo : IPackageInfo {
                 if (parcelableData is Notification) {
                     val pendingIntent = parcelableData.contentIntent
                     pendingIntent.send()
-                    Log.i(TAG, "打开微信")
+                    Log.i(TAG, "openApp -> " + "打开微信")
                 }
                 break
             }
@@ -137,11 +138,12 @@ class WechatPackageInfo : IPackageInfo {
 //        }
     }
 
-    private fun clickViewById(s: String) {
+    private fun clickViewById(sId: String) {
         handler.removeMessages(SCREEN_LOCK_CLICK_TAG)
         val rootInActiveWindow = iNodeInfoListener!!.getNodeInfo() ?: return
-        val infosByViewId = rootInActiveWindow.findAccessibilityNodeInfosByViewId(s)
+        val infosByViewId = rootInActiveWindow.findAccessibilityNodeInfosByViewId(sId)
         for (node: AccessibilityNodeInfo in infosByViewId) {
+            Log.i(TAG, "clickViewById -> " + "开红包")
             node.performAction(AccessibilityNodeInfo.ACTION_CLICK)
         }
     }

@@ -1,43 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/main_backaground"
-    tools:context="com.zingking.redhelper.MainActivity">
+<layout>
 
-    <Button
-        android:id="@+id/btn_start"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="8dp"
-        android:text="开启无障碍"
-        tools:ignore="MissingConstraints" />
+    <data>
 
-    <FrameLayout
-        android:id="@+id/ll_wechat"
+        <variable
+            name="config"
+            type="com.zingking.redhelper.BuildConfig" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/btn_start">
+        android:layout_height="match_parent"
+        android:background="@drawable/main_backaground"
+        tools:context="com.zingking.redhelper.MainActivity">
+
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:text="开启无障碍"
+            tools:ignore="MissingConstraints" />
+
+        <FrameLayout
+            android:id="@+id/ll_wechat"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/btn_start">
+
+            <TextView
+                android:id="@+id/tv_wechat"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:text="微信红包"
+                android:textColor="#000000"
+                android:textSize="25sp" />
+
+            <com.suke.widget.SwitchButton
+                android:id="@+id/sw_wechat"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical|right"
+
+                tools:ignore="MissingConstraints" />
+        </FrameLayout>
 
         <TextView
-            android:id="@+id/tv_wechat"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
-            android:text="微信红包"
-            android:textColor="#000000"
-            android:textSize="25sp" />
-
-        <com.suke.widget.SwitchButton
-            android:id="@+id/sw_wechat"
-            android:layout_width="60dp"
+            android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_gravity="center_vertical|right"
+            android:gravity="center"
+            android:text='@{"-VC"+String.valueOf(config.VERSION_CODE)+"-"}'
+            android:textColor="#000000"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-            tools:ignore="MissingConstraints" />
-    </FrameLayout>
-
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+</layout>

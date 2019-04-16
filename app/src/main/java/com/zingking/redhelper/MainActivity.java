@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import com.suke.widget.SwitchButton;
 import com.zingking.redhelper.appinfo.PackageInfoHelper;
 import com.zingking.redhelper.appinfo.WechatPackageInfo;
+import com.zingking.redhelper.databinding.ActivityMainBinding;
 import com.zingking.redhelper.service.RedPacketService;
 
 public class MainActivity extends Activity {
@@ -42,7 +44,9 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+//        setContentView(R.layout.activity_main);
+        ActivityMainBinding dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        dataBinding.setConfig(new BuildConfig());
         initView();
         setListener();
         wechatPackageInfo = new WechatPackageInfo();
