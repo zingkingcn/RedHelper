@@ -11,16 +11,16 @@ import android.view.accessibility.AccessibilityNodeInfo
  * Copyright © 2018 www.zingking.cn All Rights Reserved.
  * @author Z.kai
  * @date 2019/4/12
- * @description
+ * @description 适配 微信7.0.3 版本
  */
 
-class WechatPackageInfo : IPackageInfo {
+open class WechatPackageInfo703 : IPackageInfo {
+    open val CHAT_UI_CLASS = "com.tencent.mm.ui.LauncherUI" // 微信聊天界面
+    open val MONEY_UI_CLASS = "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyNotHookReceiveUI" // 抢红包界面
+    open val OPEN_BUTTON_ID = "com.tencent.mm:id/cyf" // "开"按钮
+    open val MESSAGE_GROUP_ID = "com.tencent.mm:id/alc" // 消息树(ListView)的父控件名
     val SCREEN_LOCK_CLICK_INTERVAL = 3000L // 锁屏状态下弹出带“开”字的框时，不会触发自动点“开”的逻辑，使用延迟处理
     val SCREEN_LOCK_CLICK_TAG = 0x22 // 锁屏状态下弹出带“开”字的框时，不会触发自动点“开”的逻辑，使用延迟处理
-    val CHAT_UI_CLASS = "com.tencent.mm.ui.LauncherUI" // 微信聊天界面
-    val MONEY_UI_CLASS = "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyNotHookReceiveUI" // 抢红包界面
-    val OPEN_BUTTON_ID = "com.tencent.mm:id/cyf" // "开"按钮
-    val MESSAGE_GROUP_ID = "com.tencent.mm:id/alc" // 消息树(ListView)的父控件名
     val handler: Handler = Handler {
         if (it.what == SCREEN_LOCK_CLICK_TAG) {
             clickViewById(OPEN_BUTTON_ID)
@@ -30,7 +30,7 @@ class WechatPackageInfo : IPackageInfo {
 
     override var event: AccessibilityEvent? = null
     override var iNodeInfoListener: INodeInfoListener? = null
-    val TAG = "WechatPackageInfo"
+    val TAG = "WechatPackageInfo703"
 
     init {
         println("Init block")
@@ -100,6 +100,8 @@ class WechatPackageInfo : IPackageInfo {
     override fun openApp() {
         val texts: List<CharSequence> = event!!.text
         for (text in texts) {
+            Log.i(TAG, "消息" + text)
+
             if (text.contains("微信红包")) {
                 val parcelableData = event!!.parcelableData
                 if (parcelableData is Notification) {

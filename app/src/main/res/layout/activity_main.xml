@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -10,11 +10,50 @@
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/main_backaground"
+        android:padding="5dp"
         tools:context="com.zingking.redhelper.MainActivity">
+
+        <TextView
+            android:id="@+id/tv_choose_version"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:text="选择微信版本"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            tools:ignore="MissingConstraints" />
+
+        <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/sg_version_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/tv_choose_version"
+            segmentedgroup:sc_border_width="2dp"
+            segmentedgroup:sc_checked_text_color="#EB4744"
+            segmentedgroup:sc_corner_radius="10dp"
+            segmentedgroup:sc_tint_color="#FFFFFF"
+            tools:ignore="MissingConstraints">
+
+            <RadioButton
+                android:id="@+id/rb_704"
+                style="@style/RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7.0.4" />
+
+            <RadioButton
+                android:id="@+id/rb_703"
+                style="@style/RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7.0.3" />
+        </info.hoang8f.android.segmented.SegmentedGroup>
+
 
         <Button
             android:id="@+id/btn_start"
@@ -22,10 +61,12 @@
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:text="开启无障碍"
+            android:textColor="#ffffff"
+            app:layout_constraintTop_toBottomOf="@id/sg_version_list"
             tools:ignore="MissingConstraints" />
 
         <FrameLayout
-            android:id="@+id/ll_wechat"
+            android:id="@+id/fl_wechat"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -36,9 +77,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
-                android:text="微信红包"
-                android:textColor="#000000"
-                android:textSize="25sp" />
+                android:text="开抢微信红包"
+                android:textColor="#ffffff"
+                android:textSize="22sp" />
 
             <com.suke.widget.SwitchButton
                 android:id="@+id/sw_wechat"
@@ -49,7 +90,44 @@
                 tools:ignore="MissingConstraints" />
         </FrameLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/aaa">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="使用说明" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="1.开启微信“通知显示消息详情”(微信：我->设置->新消息提醒->通知显示消息详情)" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="2.选择当前手机安装的微信版本(微信：我->设置->关于微信)" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="3.点击“开启无障碍”，选择“红包助手”，打开开关" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="4.开始抢红包" />
+        </LinearLayout>
+
         <TextView
+            android:id="@+id/aaa"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:gravity="center"
