@@ -1,11 +1,12 @@
 package com.zingking.redhelper.service
 
 import android.accessibilityservice.AccessibilityService
-import android.app.Notification
+import android.content.Context
+import android.os.Build
+import android.os.PowerManager
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
-import com.zingking.redhelper.RedHelper
 import com.zingking.redhelper.RedHelper.WECHAT_PACKAGE_NAME
 import com.zingking.redhelper.appinfo.INodeInfoListener
 import com.zingking.redhelper.appinfo.IPackageInfo
@@ -34,6 +35,20 @@ class RedPacketService : AccessibilityService(), INodeInfoListener {
                 packageInfo.iNodeInfoListener = this
                 when (eventType) {
                     AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED -> {
+                        val powerManager: PowerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+                        var screennOn = false
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+                            screennOn = powerManager.isInteractive
+                        } else {
+                            screennOn = powerManager.isScreenOn
+                        }
+                        if (!screennOn){
+                            val wakeLock = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP or
+                            PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "redHelper:RedPacketService")
+                            wakeLock.acquire(3000)
+                            wakeLock.release()
+                        }
                         packageInfo.openApp()
                     }
                     AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
