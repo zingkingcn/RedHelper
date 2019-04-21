@@ -97,7 +97,7 @@ open class WechatPackageInfo703 : IPackageInfo {
         return result
     }
 
-    override fun openApp() {
+    override fun openApp(iAppListener: IAppListener?) {
         val texts: List<CharSequence> = event!!.text
         for (text in texts) {
             Log.i(TAG, "消息" + text)
@@ -108,6 +108,7 @@ open class WechatPackageInfo703 : IPackageInfo {
                     val pendingIntent = parcelableData.contentIntent
                     pendingIntent.send()
                     Log.i(TAG, "openApp -> " + "打开微信")
+                    iAppListener?.onOpenApp()
                 }
                 break
             }

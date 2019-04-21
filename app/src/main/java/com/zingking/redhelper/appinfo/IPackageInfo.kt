@@ -13,7 +13,7 @@ interface IPackageInfo {
     var event: AccessibilityEvent?
     var iNodeInfoListener: INodeInfoListener?
 
-    fun openApp()
+    fun openApp(iAppListener: IAppListener?)
 
     fun grabPacket()
 

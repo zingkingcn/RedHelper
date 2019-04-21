@@ -1,13 +1,15 @@
 package com.zingking.redhelper.service
 
 import android.accessibilityservice.AccessibilityService
+import android.app.KeyguardManager
 import android.content.Context
-import android.os.Build
-import android.os.PowerManager
+import android.content.Intent
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import com.zingking.redhelper.MessageActivity
 import com.zingking.redhelper.RedHelper.WECHAT_PACKAGE_NAME
+import com.zingking.redhelper.appinfo.IAppListener
 import com.zingking.redhelper.appinfo.INodeInfoListener
 import com.zingking.redhelper.appinfo.IPackageInfo
 import com.zingking.redhelper.appinfo.PackageInfoHelper
@@ -35,21 +37,15 @@ class RedPacketService : AccessibilityService(), INodeInfoListener {
                 packageInfo.iNodeInfoListener = this
                 when (eventType) {
                     AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED -> {
-                        val powerManager: PowerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
-                        var screennOn = false
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-                            screennOn = powerManager.isInteractive
-                        } else {
-                            screennOn = powerManager.isScreenOn
-                        }
-                        if (!screennOn){
-                            val wakeLock = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP or
-                            PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "redHelper:RedPacketService")
-                            wakeLock.acquire(3000)
-                            wakeLock.release()
-                        }
-                        packageInfo.openApp()
+                        packageInfo.openApp(IAppListener {
+                            val keyManager: KeyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+                            if (keyManager.isKeyguardLocked) {
+                                var intent: Intent = Intent(this, MessageActivity::class.java)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                intent.putExtra("msg", "微信收到一个红包，点我抢")
+                                startActivity(intent)
+                            }
+                        })
                     }
                     AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
                         packageInfo.grabPacket()
