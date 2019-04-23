@@ -145,6 +145,9 @@ public class MainActivity extends Activity {
         tvChooseVersion = (TextView) findViewById(R.id.tv_choose_version);
         rb703 = findViewById(R.id.rb_703);
         rb704 = findViewById(R.id.rb_704);
+        String buildVersion = getString(R.string.build_revision);
+        TextView tvGitVersion = findViewById(R.id.tv_git_version);
+        tvGitVersion.setText("VC" + BuildConfig.VERSION_CODE + "_" + buildVersion);
     }
 
     public void initNotificationBar() {

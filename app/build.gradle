@@ -28,6 +28,30 @@ android {
         enabled = true
     }
 
+    defaultConfig {
+        resValue "string", "build_time", buildTime()
+        resValue "string", "build_host", hostName()
+        resValue "string", "build_revision", revision()
+    }
+
+}
+
+
+static def buildTime() {
+    return new Date().format("yyyy-MM-dd HH:mm:ss")
+}
+
+static def hostName() {
+    return System.getProperty("user.name") + "@" + InetAddress.localHost.hostName
+}
+
+def revision() {
+    def code = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = code
+    }
+    return code.toString()
 }
 
 dependencies {
