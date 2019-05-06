@@ -13,6 +13,10 @@ android {
         versionCode 3
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField 'int', 'TYPE','1'
+        buildConfigField 'String','BASE_URL','"http://xxx.com"'
+        buildConfigField 'String','BASE_URL','"http://xxx.com:8080"'
     }
     buildTypes {
         release {
@@ -32,6 +36,31 @@ android {
         resValue "string", "build_time", buildTime()
         resValue "string", "build_host", hostName()
         resValue "string", "build_revision", revision()
+    }
+
+    flavorDimensions "default"//这个名字貌似随便取，也可以有多个，总之一定要有..
+    productFlavors {
+        // preview release
+        pre_release {
+            buildConfigField 'int', 'TYPE', '1'
+            buildConfigField 'String', 'BASE_URL', '"http://test.xxx.com"'
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "192.168.1.1"]
+        }
+        // publish release
+        pub_release {
+            buildConfigField 'String', 'BASE_URL', '"http://test.xxx.com"'
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
+        }
+        // developer debug
+        dev_debug {
+            buildConfigField 'String', 'BASE_URL', '"http://test.xxx.com"'
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "qq"]
+        }
+        // tester debug
+        debug_tester {
+            buildConfigField 'String', 'BASE_URL', '"http://test.xxx.com"'
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "qq"]
+        }
     }
 
 }
@@ -73,8 +102,12 @@ repositories {
 android.applicationVariants.all { variant ->
 //    if (variant.buildType.name == 'release') {
     def time = new SimpleDateFormat("yyyyMMddHHmm").format(System.currentTimeMillis())
+    def buildName //渠道名字
     variant.outputs.each { output ->
-        output.outputFileName = "RedHelper.V${versionName}_VC${versionCode}_${time}_${variant.buildType.name}.apk"
+        variant.productFlavors.each { product ->
+            buildName = product.name //获取渠道名字
+        }
+        output.outputFileName = "${buildName}RedHelper.V${versionName}_VC${versionCode}_${time}_${variant.buildType.name}.apk"
     }
 //    }
 }
