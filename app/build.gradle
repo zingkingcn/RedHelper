@@ -15,8 +15,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField 'int', 'TYPE','1'
-        buildConfigField 'String','BASE_URL','"http://xxx.com"'
-        buildConfigField 'String','BASE_URL','"http://xxx.com:8080"'
     }
     buildTypes {
         release {
