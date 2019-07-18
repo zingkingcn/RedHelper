@@ -9,6 +9,6 @@ package com.zingking.redhelper.appinfo
 
 class WechatPackageInfo705 : WechatPackageInfo703() {
     override var OPEN_BUTTON_ID = "com.tencent.mm:id/d4h" // "开"按钮
-    override val MESSAGE_GROUP_ID = "com.tencent.mm:id/alj" // 消息树(ListView)的父控件名
+    override val MESSAGE_GROUP_ID = "com.tencent.mm:id/an9" // 消息树(ListView)的父控件名
 
 }
