@@ -24,7 +24,7 @@ class RedPacketService : AccessibilityService(), INodeInfoListener {
 
     private val TAG = "RedPacketService"
     override fun onInterrupt() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Log.e(TAG,"onInterrupt 服务中断")
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {

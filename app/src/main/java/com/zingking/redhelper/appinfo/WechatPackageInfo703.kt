@@ -16,8 +16,11 @@ import android.view.accessibility.AccessibilityNodeInfo
 
 open class WechatPackageInfo703 : IPackageInfo {
     open val CHAT_UI_CLASS = "com.tencent.mm.ui.LauncherUI" // 微信聊天界面
-    open val MONEY_UI_CLASS = "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyNotHookReceiveUI" // 抢红包界面
+    open val MONEY_UI_CLASS = "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyNotHookReceiveUI" // 抢红包界面,有开字的那个弹框
     open val OPEN_BUTTON_ID = "com.tencent.mm:id/cyf" // "开"按钮
+    /**
+     * 这个值是停留在在聊天页面(不是聊天列表)是监听消息用的，区别于[grabPacket]
+     */
     open val MESSAGE_GROUP_ID = "com.tencent.mm:id/alc" // 消息树(ListView)的父控件名
     val SCREEN_LOCK_CLICK_INTERVAL = 3000L // 锁屏状态下弹出带“开”字的框时，不会触发自动点“开”的逻辑，使用延迟处理
     val SCREEN_LOCK_CLICK_TAG = 0x22 // 锁屏状态下弹出带“开”字的框时，不会触发自动点“开”的逻辑，使用延迟处理
@@ -36,6 +39,9 @@ open class WechatPackageInfo703 : IPackageInfo {
         println("Init block")
     }
 
+    /**
+     * 这个是点击"微信红包"通知跳转到微信聊天界面用的区别于[MESSAGE_GROUP_ID]
+     */
     override fun grabPacket() {
         val rootInActiveWindow: AccessibilityNodeInfo = iNodeInfoListener!!.getNodeInfo() ?: return
         val className = event!!.className.toString()

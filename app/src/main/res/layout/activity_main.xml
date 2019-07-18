@@ -38,7 +38,12 @@
             segmentedgroup:sc_corner_radius="10dp"
             segmentedgroup:sc_tint_color="#FFFFFF"
             tools:ignore="MissingConstraints">
-
+            <RadioButton
+                android:id="@+id/rb_705"
+                style="@style/RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7.0.5" />
             <RadioButton
                 android:id="@+id/rb_704"
                 style="@style/RadioButton"

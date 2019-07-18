@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -30,6 +31,7 @@ import com.zingking.redhelper.appinfo.IPackageInfo;
 import com.zingking.redhelper.appinfo.PackageInfoHelper;
 import com.zingking.redhelper.appinfo.WechatPackageInfo703;
 import com.zingking.redhelper.appinfo.WechatPackageInfo704;
+import com.zingking.redhelper.appinfo.WechatPackageInfo705;
 import com.zingking.redhelper.databinding.ActivityMainBinding;
 import com.zingking.redhelper.service.RedPacketService;
 
@@ -42,12 +44,12 @@ public class MainActivity extends Activity {
     ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-
+            Log.d(TAG, "onServiceConnected() called with: name = [" + name + "], service = [" + service + "]");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
+            Log.d(TAG, "onServiceDisconnected() called with: name = [" + name + "]");
         }
     };
     private Button btnStart;
@@ -84,6 +86,9 @@ public class MainActivity extends Activity {
         });
         swWechat.setOnTouchListener((v, event) -> !hadChooseVersion());
         swWechat.setOnCheckedChangeListener((view, isChecked) -> {
+            boolean accessibilityEnabled = Utils.isAccessibilityEnabled(this);
+            Log.i(TAG, "accessibilityEnabled = " + accessibilityEnabled);
+            Toast.makeText(this, "无障碍服务未开启或开启失败！", Toast.LENGTH_LONG).show();
             if (isChecked) {
                 PackageInfoHelper.Companion.getInstance().addPackageInfo(RedHelper.WECHAT_PACKAGE_NAME, iPackageInfo);
             } else {
@@ -96,6 +101,9 @@ public class MainActivity extends Activity {
         sgVersionList.setOnCheckedChangeListener((group, checkedId) -> {
             tvChooseVersion.clearAnimation();
             switch (checkedId) {
+                case R.id.rb_705:
+                    iPackageInfo = new WechatPackageInfo705();
+                    break;
                 case R.id.rb_704:
                     iPackageInfo = new WechatPackageInfo704();
                     break;
