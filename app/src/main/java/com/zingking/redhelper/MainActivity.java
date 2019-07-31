@@ -9,7 +9,6 @@ import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
@@ -32,6 +31,7 @@ import com.zingking.redhelper.appinfo.PackageInfoHelper;
 import com.zingking.redhelper.appinfo.WechatPackageInfo703;
 import com.zingking.redhelper.appinfo.WechatPackageInfo704;
 import com.zingking.redhelper.appinfo.WechatPackageInfo705;
+import com.zingking.redhelper.appinfo.WechatPackageInfo706;
 import com.zingking.redhelper.databinding.ActivityMainBinding;
 import com.zingking.redhelper.service.RedPacketService;
 
@@ -52,11 +52,11 @@ public class MainActivity extends Activity {
             Log.d(TAG, "onServiceDisconnected() called with: name = [" + name + "]");
         }
     };
-    private Button btnStart;
+    private Button btnStart, btnCheck;
     private SwitchButton swWechat;
     private IPackageInfo iPackageInfo;
     private SegmentedGroup sgVersionList;
-    private TextView tvChooseVersion;
+    private TextView tvChooseVersion, tvCheck;
     private RadioButton rb703;
     private RadioButton rb704;
 
@@ -78,6 +78,15 @@ public class MainActivity extends Activity {
 
     @SuppressLint("ClickableViewAccessibility")
     private void setListener() {
+        btnCheck.setOnClickListener(v -> {
+            boolean accessibilityEnabled = Utils.isAccessibilityEnabled(this);
+            Log.i(TAG, "accessibilityEnabled = " + accessibilityEnabled);
+            if (!accessibilityEnabled) {
+                tvCheck.setText("ERROR：无障碍服务未开启或开启失败，助手无效！");
+            } else {
+                tvCheck.setText("CONGRATULATIONS：无障碍服务已开启");
+            }
+        });
         btnStart.setOnClickListener(v -> {
             initNotificationBar();
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
@@ -88,7 +97,9 @@ public class MainActivity extends Activity {
         swWechat.setOnCheckedChangeListener((view, isChecked) -> {
             boolean accessibilityEnabled = Utils.isAccessibilityEnabled(this);
             Log.i(TAG, "accessibilityEnabled = " + accessibilityEnabled);
-            Toast.makeText(this, "无障碍服务未开启或开启失败！", Toast.LENGTH_LONG).show();
+            if (!accessibilityEnabled) {
+                Toast.makeText(this, "无障碍服务未开启或开启失败！", Toast.LENGTH_LONG).show();
+            }
             if (isChecked) {
                 PackageInfoHelper.Companion.getInstance().addPackageInfo(RedHelper.WECHAT_PACKAGE_NAME, iPackageInfo);
             } else {
@@ -101,6 +112,9 @@ public class MainActivity extends Activity {
         sgVersionList.setOnCheckedChangeListener((group, checkedId) -> {
             tvChooseVersion.clearAnimation();
             switch (checkedId) {
+                case R.id.rb_706:
+                    iPackageInfo = new WechatPackageInfo706();
+                    break;
                 case R.id.rb_705:
                     iPackageInfo = new WechatPackageInfo705();
                     break;
@@ -148,9 +162,11 @@ public class MainActivity extends Activity {
 
     private void initView() {
         btnStart = (Button) findViewById(R.id.btn_start);
+        btnCheck = (Button) findViewById(R.id.btn_check);
         swWechat = (SwitchButton) findViewById(R.id.sw_wechat);
         sgVersionList = (SegmentedGroup) findViewById(R.id.sg_version_list);
         tvChooseVersion = (TextView) findViewById(R.id.tv_choose_version);
+        tvCheck = (TextView) findViewById(R.id.tv_check);
         rb703 = findViewById(R.id.rb_703);
         rb704 = findViewById(R.id.rb_704);
         String buildVersion = getString(R.string.build_revision);

@@ -36,10 +36,10 @@ class RedPacketService : AccessibilityService(), INodeInfoListener {
                 packageInfo.event = event
                 packageInfo.iNodeInfoListener = this
                 when (eventType) {
-                    AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED -> {
+                    AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED -> { // 1.接收到通知：打开微信app
                         packageInfo.openApp(IAppListener {
                             val keyManager: KeyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-                            if (keyManager.isKeyguardLocked) {
+                            if (keyManager.isKeyguardLocked) { // 锁屏打开app
                                 var intent: Intent = Intent(this, MessageActivity::class.java)
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 intent.putExtra("msg", "微信收到一个红包，点我抢")
@@ -47,10 +47,10 @@ class RedPacketService : AccessibilityService(), INodeInfoListener {
                             }
                         })
                     }
-                    AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
+                    AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> { // 2.打开了微信app：执行了上面的 1 后触发
                         packageInfo.grabPacket()
                     }
-                    AccessibilityEvent.TYPE_VIEW_SCROLLED -> {
+                    AccessibilityEvent.TYPE_VIEW_SCROLLED -> { // 3.在聊天页面：聊天信息滚动时触发
                         packageInfo.dealLastMsg()
                     }
                     else -> {
