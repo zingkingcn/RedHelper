@@ -37,6 +37,8 @@ import com.zingking.redhelper.service.RedPacketService;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
+import static com.zingking.redhelper.Utils.isServiceRunning;
+
 public class MainActivity extends Activity {
     // https://www.cnblogs.com/roccheung/p/5797270.html
     // https://www.cnblogs.com/huolongluo/p/6120946.html
@@ -72,6 +74,12 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        checkAccess();
+    }
+
+    @Override
     public void onBackPressed() {
         moveTaskToBack(false);
     }
@@ -79,27 +87,25 @@ public class MainActivity extends Activity {
     @SuppressLint("ClickableViewAccessibility")
     private void setListener() {
         btnCheck.setOnClickListener(v -> {
-            boolean accessibilityEnabled = Utils.isAccessibilityEnabled(this);
-            Log.i(TAG, "accessibilityEnabled = " + accessibilityEnabled);
-            if (!accessibilityEnabled) {
-                tvCheck.setText("ERROR：无障碍服务未开启或开启失败，助手无效！");
-            } else {
-                tvCheck.setText("CONGRATULATIONS：无障碍服务已开启");
-            }
+            checkAccess();
         });
         btnStart.setOnClickListener(v -> {
+            //模拟Home键操作
+//            Intent intent = new Intent(Intent.ACTION_MAIN);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.addCategory(Intent.CATEGORY_HOME);
+//            startActivity(intent);
+
             initNotificationBar();
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             startActivity(intent);
-            bindService(new Intent(this, RedPacketService.class), connection, Service.BIND_AUTO_CREATE);
+            Intent service = new Intent(this, RedPacketService.class);
+            bindService(service, connection, Service.BIND_AUTO_CREATE);
         });
         swWechat.setOnTouchListener((v, event) -> !hadChooseVersion());
         swWechat.setOnCheckedChangeListener((view, isChecked) -> {
-            boolean accessibilityEnabled = Utils.isAccessibilityEnabled(this);
-            Log.i(TAG, "accessibilityEnabled = " + accessibilityEnabled);
-            if (!accessibilityEnabled) {
-                Toast.makeText(this, "无障碍服务未开启或开启失败！", Toast.LENGTH_LONG).show();
-            }
+            boolean isRunning = isServiceRunning(this, RedPacketService.class.getName());
+            Log.i(TAG, "RedPacketService isRunning = " + isRunning);
             if (isChecked) {
                 PackageInfoHelper.Companion.getInstance().addPackageInfo(RedHelper.WECHAT_PACKAGE_NAME, iPackageInfo);
             } else {
@@ -129,6 +135,16 @@ public class MainActivity extends Activity {
         });
     }
 
+    private void checkAccess() {
+        boolean accessibilitySettingsOn = Utils.isAccessibilitySettingsOn(this);
+        Log.i(TAG, "accessibilitySettingsOn = " + accessibilitySettingsOn);
+        if (!accessibilitySettingsOn) {
+            tvCheck.setText("ERROR：无障碍服务未开启或开启失败，助手无效！");
+        } else {
+            tvCheck.setText("CONGRATULATIONS：无障碍服务已开启");
+        }
+    }
+
     /**
      * 抢红包中
      */
@@ -143,6 +159,11 @@ public class MainActivity extends Activity {
     }
 
     private boolean hadChooseVersion() {
+        boolean accessibilitySettingsOn = Utils.isAccessibilitySettingsOn(this);
+        if (!accessibilitySettingsOn){
+            Toast.makeText(this, "请开启无障碍服务", Toast.LENGTH_LONG).show();
+            return false;
+        }
         int radioButtonId = sgVersionList.getCheckedRadioButtonId();
         if (radioButtonId == -1) {
             Toast.makeText(this, "请选择微信版本", Toast.LENGTH_SHORT).show();

@@ -39,26 +39,26 @@ android {
     flavorDimensions "default"//这个名字貌似随便取，也可以有多个，总之一定要有..
     productFlavors {
         // preview release
-        pre_release {
+        preview {
             buildConfigField 'int', 'TYPE', '1'
             buildConfigField 'String', 'BASE_URL', '"http://test.xxx.com"'
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "192.168.1.1"]
         }
         // publish release
-        pub_release {
+        publish {
             buildConfigField 'String', 'BASE_URL', '"http://test.xxx.com"'
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
         }
         // developer debug
-        dev_debug {
+        developer {
             buildConfigField 'String', 'BASE_URL', '"http://test.xxx.com"'
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "qq"]
         }
-        // tester debug
-        debug_tester {
-            buildConfigField 'String', 'BASE_URL', '"http://test.xxx.com"'
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "qq"]
-        }
+//        // tester debug
+//        debug_tester {
+//            buildConfigField 'String', 'BASE_URL', '"http://test.xxx.com"'
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "qq"]
+//        }
     }
 
 }

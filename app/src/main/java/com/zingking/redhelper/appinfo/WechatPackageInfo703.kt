@@ -1,8 +1,10 @@
 package com.zingking.redhelper.appinfo
 
 import android.app.Notification
+import android.content.Intent
 import android.os.Handler
 import android.os.Message
+import android.support.v4.content.ContextCompat.startActivity
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
@@ -18,6 +20,7 @@ open class WechatPackageInfo703 : IPackageInfo {
     open val CHAT_UI_CLASS = "com.tencent.mm.ui.LauncherUI" // 微信聊天界面
     open val MONEY_UI_CLASS = "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyNotHookReceiveUI" // 抢红包界面,有开字的那个弹框
     open val OPEN_BUTTON_ID = "com.tencent.mm:id/cyf" // "开"按钮
+    open val MONEY_UI_DETAIL_CLASS = "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyDetailUI" // 红包详情页面
     /**
      * 这个值是停留在在聊天页面(不是聊天列表)是监听消息用的，区别于[grabPacket]
      */
@@ -54,6 +57,14 @@ open class WechatPackageInfo703 : IPackageInfo {
             }
             MONEY_UI_CLASS -> { // 开红包页面
                 clickViewById(OPEN_BUTTON_ID)
+            }
+            MONEY_UI_DETAIL_CLASS -> { // 红包详情页面
+//
+//                //模拟Home键操作
+//                var intent: Intent = Intent(Intent.ACTION_MAIN);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent.addCategory(Intent.CATEGORY_HOME);
+//                startActivity(intent);
             }
 
             else -> {
