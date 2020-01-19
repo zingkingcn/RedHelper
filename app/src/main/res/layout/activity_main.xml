@@ -211,6 +211,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:text="4.开始抢红包" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="Tips:请保持本应用后台运行" />
         </LinearLayout>
 
 
