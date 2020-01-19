@@ -96,14 +96,6 @@
                 android:text="7.0.3" />
         </info.hoang8f.android.segmented.SegmentedGroup>
 
-        <CheckBox
-            android:id="@+id/cb_home"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintLeft_toLeftOf="@id/tv_choose_version"
-            android:text="抢到红包后自动返回桌面(建议无人值守时开启)"
-            app:layout_constraintTop_toBottomOf="@id/sg_version_list"
-            android:layout_height="wrap_content" />
         <!--无障碍服务状态-->
         <TextView
             android:id="@+id/tv_service_state"
@@ -111,9 +103,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="无障碍服务状态(点击刷新)"
-
             app:layout_constraintLeft_toLeftOf="@id/tv_choose_version"
-            app:layout_constraintTop_toBottomOf="@id/cb_home" />
+            app:layout_constraintTop_toBottomOf="@id/sg_version_list" />
 
         <TextView
             android:id="@+id/tv_start"
@@ -163,11 +154,38 @@
                 android:layout_gravity="center_vertical|right" />
         </FrameLayout>
 
+        <!--增强功能-->
+        <TextView
+            android:id="@+id/tips_pro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="增强功能"
+            app:layout_constraintLeft_toLeftOf="@id/tv_choose_version"
+            app:layout_constraintTop_toBottomOf="@id/fl_wechat" />
+
+        <CheckBox
+            android:id="@+id/cb_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="抢到红包后自动返回桌面(建议无人值守时开启)"
+            app:layout_constraintLeft_toLeftOf="@id/tv_choose_version"
+            app:layout_constraintTop_toBottomOf="@id/tips_pro" />
+
+        <CheckBox
+            android:id="@+id/cb_lock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="锁屏后继续抢红包"
+            app:layout_constraintLeft_toLeftOf="@id/tv_choose_version"
+            app:layout_constraintTop_toBottomOf="@id/cb_home" />
+
+        <!--抢红包记录-->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/ll_guide"
-            app:layout_constraintTop_toBottomOf="@id/fl_wechat">
+            app:layout_constraintTop_toBottomOf="@id/cb_lock">
 
             <TextView
                 android:id="@+id/tv_record"
@@ -179,54 +197,61 @@
             android:id="@+id/ll_guide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@id/tv_git_version">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="使用说明" />
+                android:text="使用说明"
+                android:textSize="13sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="1.开启微信“通知显示消息详情”(微信：我->设置->新消息提醒->通知显示消息详情)" />
+                android:text="1.开启微信“通知显示消息详情”(微信：我->设置->新消息提醒->通知显示消息详情)"
+                android:textSize="13sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="2.选择当前手机安装的微信版本(微信：我->设置->关于微信)" />
+                android:text="2.选择当前手机安装的微信版本(微信：我->设置->关于微信)"
+                android:textSize="13sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="3.点击“开启无障碍”，选择“红包助手”，打开开关" />
+                android:text="3.点击“开启无障碍”，选择“红包助手”，打开开关"
+                android:textSize="13sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="4.开始抢红包" />
+                android:text="4.开始抢红包"
+                android:textSize="13sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="Tips:请保持本应用后台运行" />
+                android:text="小贴士：\n1.请保持本应用后台运行\n2.如设置密码，则只会点亮屏幕，解锁后自动抢"
+                android:textSize="13sp" />
+
         </LinearLayout>
-
 
         <TextView
             android:id="@+id/tv_git_version"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
+            android:paddingTop="3dp"
             android:text="版本号"
-            android:textColor="#000000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />

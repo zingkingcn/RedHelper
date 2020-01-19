@@ -38,6 +38,7 @@ class RedPacketService : AccessibilityService(), INodeInfoListener {
                 when (eventType) {
                     AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED -> { // 1.接收到通知：打开微信app
                         packageInfo.openApp(IAppListener {
+                            // TODO event bus 发送收到红包消息，由首页去判断和打开 MessageActivity
                             val keyManager: KeyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
                             if (keyManager.isKeyguardLocked) { // 锁屏打开app
                                 var intent: Intent = Intent(this, MessageActivity::class.java)

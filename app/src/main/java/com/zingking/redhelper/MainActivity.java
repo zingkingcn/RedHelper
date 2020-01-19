@@ -160,6 +160,7 @@ public class MainActivity extends Activity {
                 default:
             }
         });
+
     }
 
     private boolean checkAccess() {

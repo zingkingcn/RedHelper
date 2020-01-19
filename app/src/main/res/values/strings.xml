@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">红包助手</string>
-    <string name="desc">开启此功能后，可协助抢红包。</string>
+    <string name="desc">开启此功能后，可协助抢红包。\n红包助手是通过监听通知栏消息发现红包后，模拟物理点击。并不存在破解微信或是系统层面的技术。\n红包助手并未申请网络相关权限(可在系统设置的权限管理中查看)，不必担心用户数据泄露。</string>
 </resources>
