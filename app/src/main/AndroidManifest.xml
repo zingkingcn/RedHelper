@@ -12,7 +12,7 @@
     <application
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo3"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/logo3"
         android:supportsRtl="true"
