@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,6 +64,7 @@ public class MainActivity extends Activity {
     private SegmentedGroup sgVersionList;
     private TextView tvChooseVersion, tvCheck, tvStart, tvServiceState;
     private RadioButton rb703, rb704, rb705, rb706, rb7010;
+    private CheckBox cbHome;
     private NotificationManager notificationManager;
 
     @Override
@@ -97,7 +99,7 @@ public class MainActivity extends Activity {
                 Toast.makeText(this, "未开启", Toast.LENGTH_SHORT).show();
             }
         });
-        tvCheck.setOnClickListener(v->{
+        tvCheck.setOnClickListener(v -> {
             if (checkAccess()) {
                 Toast.makeText(this, "已开启", Toast.LENGTH_SHORT).show();
             } else {
@@ -143,7 +145,7 @@ public class MainActivity extends Activity {
                 case R.id.rb_7010:
                     iPackageInfo = new WechatPackageInfo7010();
                     break;
-                    case R.id.rb_706:
+                case R.id.rb_706:
                     iPackageInfo = new WechatPackageInfo706();
                     break;
                 case R.id.rb_705:
@@ -189,7 +191,7 @@ public class MainActivity extends Activity {
 
     private boolean hadChooseVersion() {
         boolean accessibilitySettingsOn = Utils.isAccessibilitySettingsOn(this);
-        if (!accessibilitySettingsOn){
+        if (!accessibilitySettingsOn) {
             Toast.makeText(this, "请开启无障碍服务", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -211,6 +213,7 @@ public class MainActivity extends Activity {
     }
 
     private void initView() {
+        cbHome = (CheckBox) findViewById(R.id.cb_home);
         tvStart = (TextView) findViewById(R.id.tv_start);
         tvServiceState = (TextView) findViewById(R.id.tv_service_state);
         swWechat = (SwitchButton) findViewById(R.id.sw_wechat);
@@ -252,7 +255,6 @@ public class MainActivity extends Activity {
         notificationManager.notify(1, notification);//开启通知
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -260,13 +262,14 @@ public class MainActivity extends Activity {
     }
 
     @Subscribe
-    public void openHome(ReturnHomeEvent event){
-        //模拟Home键操作
+    public void openHome(ReturnHomeEvent event) {
+        if (cbHome.isChecked()) {
+            //模拟Home键操作
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addCategory(Intent.CATEGORY_HOME);
             startActivity(intent);
+        }
     }
-
 
 }
