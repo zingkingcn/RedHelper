@@ -7,6 +7,8 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import com.zingking.redhelper.ReturnHomeEvent
+import org.greenrobot.eventbus.EventBus
 
 /**
  * Copyright © 2018 www.zingking.cn All Rights Reserved.
@@ -61,6 +63,7 @@ open class WechatPackageInfo703 : IPackageInfo {
                 clickViewById(OPEN_BUTTON_ID)
             }
             MONEY_UI_DETAIL_CLASS -> { // 红包详情页面
+                EventBus.getDefault().post(ReturnHomeEvent())
 //
 //                //模拟Home键操作
 //                var intent: Intent = Intent(Intent.ACTION_MAIN);

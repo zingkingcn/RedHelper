@@ -36,6 +36,9 @@ import com.zingking.redhelper.appinfo.WechatPackageInfo706;
 import com.zingking.redhelper.databinding.ActivityMainBinding;
 import com.zingking.redhelper.service.RedPacketService;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import info.hoang8f.android.segmented.SegmentedGroup;
 
 import static com.zingking.redhelper.Utils.isServiceRunning;
@@ -72,6 +75,7 @@ public class MainActivity extends Activity {
         initView();
         setListener();
         iPackageInfo = new WechatPackageInfo704();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -221,5 +225,22 @@ public class MainActivity extends Activity {
         notification.flags = notification.FLAG_NO_CLEAR;//设置通知点击或滑动时不被清除
         notificationManager.notify(1, notification);//开启通知
     }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void openHome(ReturnHomeEvent event){
+        //模拟Home键操作
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+    }
+
 
 }
