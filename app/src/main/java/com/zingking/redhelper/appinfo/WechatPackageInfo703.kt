@@ -1,10 +1,9 @@
 package com.zingking.redhelper.appinfo
 
 import android.app.Notification
-import android.content.Intent
 import android.os.Handler
 import android.os.Message
-import android.support.v4.content.ContextCompat.startActivity
+import android.text.TextUtils
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
@@ -47,8 +46,11 @@ open class WechatPackageInfo703 : IPackageInfo {
      */
     override fun grabPacket() {
         val rootInActiveWindow: AccessibilityNodeInfo = iNodeInfoListener!!.getNodeInfo() ?: return
-        val className = event!!.className.toString()
-        when (className) {
+        val className: CharSequence? = event!!.className
+        if (TextUtils.isEmpty(className)){
+            return
+        }
+        when (className.toString()) {
             CHAT_UI_CLASS -> { // 微信聊天页面
                 val redPacket = filterRedPacket(rootInActiveWindow)
                 redPacket?.let {

@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.suke.widget.SwitchButton;
 import com.zingking.redhelper.appinfo.IPackageInfo;
 import com.zingking.redhelper.appinfo.PackageInfoHelper;
+import com.zingking.redhelper.appinfo.WechatPackageInfo7010;
 import com.zingking.redhelper.appinfo.WechatPackageInfo703;
 import com.zingking.redhelper.appinfo.WechatPackageInfo704;
 import com.zingking.redhelper.appinfo.WechatPackageInfo705;
@@ -118,7 +119,10 @@ public class MainActivity extends Activity {
         sgVersionList.setOnCheckedChangeListener((group, checkedId) -> {
             tvChooseVersion.clearAnimation();
             switch (checkedId) {
-                case R.id.rb_706:
+                case R.id.rb_7010:
+                    iPackageInfo = new WechatPackageInfo7010();
+                    break;
+                    case R.id.rb_706:
                     iPackageInfo = new WechatPackageInfo706();
                     break;
                 case R.id.rb_705:
