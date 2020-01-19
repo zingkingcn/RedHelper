@@ -15,12 +15,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,13 +58,12 @@ public class MainActivity extends Activity {
             Log.d(TAG, "onServiceDisconnected() called with: name = [" + name + "]");
         }
     };
-    private Button btnStart, btnCheck;
     private SwitchButton swWechat;
     private IPackageInfo iPackageInfo;
     private SegmentedGroup sgVersionList;
-    private TextView tvChooseVersion, tvCheck;
-    private RadioButton rb703;
-    private RadioButton rb704;
+    private TextView tvChooseVersion, tvCheck, tvStart, tvServiceState;
+    private RadioButton rb703, rb704, rb705, rb706, rb7010;
+    private NotificationManager notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +90,21 @@ public class MainActivity extends Activity {
 
     @SuppressLint("ClickableViewAccessibility")
     private void setListener() {
-        btnCheck.setOnClickListener(v -> {
-            checkAccess();
+        tvServiceState.setOnClickListener(v -> {
+            if (checkAccess()) {
+                Toast.makeText(this, "已开启", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "未开启", Toast.LENGTH_SHORT).show();
+            }
         });
-        btnStart.setOnClickListener(v -> {
+        tvCheck.setOnClickListener(v->{
+            if (checkAccess()) {
+                Toast.makeText(this, "已开启", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "未开启", Toast.LENGTH_SHORT).show();
+            }
+        });
+        tvStart.setOnClickListener(v -> {
             //模拟Home键操作
 //            Intent intent = new Intent(Intent.ACTION_MAIN);
 //            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -113,13 +123,20 @@ public class MainActivity extends Activity {
             Log.i(TAG, "RedPacketService isRunning = " + isRunning);
             if (isChecked) {
                 PackageInfoHelper.Companion.getInstance().addPackageInfo(RedHelper.WECHAT_PACKAGE_NAME, iPackageInfo);
+                initNotificationBar();
             } else {
                 PackageInfoHelper.Companion.getInstance().removePackageInfo(RedHelper.WECHAT_PACKAGE_NAME);
+                if (notificationManager != null) {
+                    notificationManager.cancelAll();
+                }
             }
         });
         View.OnTouchListener rbTouchListener = (v, event) -> grabPacketIng();
         rb703.setOnTouchListener(rbTouchListener);
         rb704.setOnTouchListener(rbTouchListener);
+        rb705.setOnTouchListener(rbTouchListener);
+        rb706.setOnTouchListener(rbTouchListener);
+        rb7010.setOnTouchListener(rbTouchListener);
         sgVersionList.setOnCheckedChangeListener((group, checkedId) -> {
             tvChooseVersion.clearAnimation();
             switch (checkedId) {
@@ -143,13 +160,17 @@ public class MainActivity extends Activity {
         });
     }
 
-    private void checkAccess() {
+    private boolean checkAccess() {
         boolean accessibilitySettingsOn = Utils.isAccessibilitySettingsOn(this);
         Log.i(TAG, "accessibilitySettingsOn = " + accessibilitySettingsOn);
         if (!accessibilitySettingsOn) {
-            tvCheck.setText("ERROR：无障碍服务未开启或开启失败，助手无效！");
+            tvCheck.setText("未开启或开启失败，助手无效！");
+            tvCheck.setTextColor(ContextCompat.getColor(this, R.color.colorRed));
+            return false;
         } else {
-            tvCheck.setText("CONGRATULATIONS：无障碍服务已开启");
+            tvCheck.setText("无障碍服务已开启");
+            tvCheck.setTextColor(ContextCompat.getColor(this, R.color.colorGreen));
+            return true;
         }
     }
 
@@ -190,26 +211,31 @@ public class MainActivity extends Activity {
     }
 
     private void initView() {
-        btnStart = (Button) findViewById(R.id.btn_start);
-        btnCheck = (Button) findViewById(R.id.btn_check);
+        tvStart = (TextView) findViewById(R.id.tv_start);
+        tvServiceState = (TextView) findViewById(R.id.tv_service_state);
         swWechat = (SwitchButton) findViewById(R.id.sw_wechat);
         sgVersionList = (SegmentedGroup) findViewById(R.id.sg_version_list);
         tvChooseVersion = (TextView) findViewById(R.id.tv_choose_version);
         tvCheck = (TextView) findViewById(R.id.tv_check);
         rb703 = findViewById(R.id.rb_703);
         rb704 = findViewById(R.id.rb_704);
+        rb705 = findViewById(R.id.rb_705);
+        rb706 = findViewById(R.id.rb_706);
+        rb7010 = findViewById(R.id.rb_7010);
         String buildVersion = getString(R.string.build_revision);
         TextView tvGitVersion = findViewById(R.id.tv_git_version);
         tvGitVersion.setText("VC" + BuildConfig.VERSION_CODE + "_" + buildVersion);
     }
 
     public void initNotificationBar() {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager == null) {
+            notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        }
         Notification.Builder builder = new Notification.Builder(this);
         builder.setSmallIcon(R.mipmap.logo3)
                 .setAutoCancel(false)
-                .setContentText("通知消息")
-                .setContentTitle("通知标题");
+                .setContentText("我一直在努力抢红包...")
+                .setContentTitle("主上");
         Notification notification = builder.build();
         //初始化通知
 //        notification.icon = R.mipmap.ic_launcher;

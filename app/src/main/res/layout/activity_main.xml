@@ -13,129 +13,165 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/main_backaground"
-        android:padding="5dp"
+        android:background="#f5f5f5"
         tools:context="com.zingking.redhelper.MainActivity">
 
+        <!--标题-->
         <TextView
-            android:id="@+id/tv_choose_version"
+            android:id="@+id/tips_title"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@color/colorPrimary"
+            android:drawableLeft="@mipmap/logo3"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="@string/app_name"
+            android:textColor="#ffffff"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--选择微信版本-->
+        <TextView
+            android:id="@+id/tv_choose_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:text="选择微信版本"
-            android:textColor="#ffffff"
-            android:textSize="20sp"
-            tools:ignore="MissingConstraints" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tips_title" />
 
         <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
             android:id="@+id/sg_version_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="@id/tv_choose_version"
             app:layout_constraintTop_toBottomOf="@id/tv_choose_version"
             segmentedgroup:sc_border_width="2dp"
-            segmentedgroup:sc_checked_text_color="#EB4744"
+            segmentedgroup:sc_checked_text_color="#ffffff"
             segmentedgroup:sc_corner_radius="10dp"
-            segmentedgroup:sc_tint_color="#FFFFFF"
-            tools:ignore="MissingConstraints">
+            segmentedgroup:sc_tint_color="@color/colorPrimary">
+
+
             <RadioButton
                 android:id="@+id/rb_7010"
-                style="@style/RadioButton"
+                style="@style/radioButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="0dp"
                 android:text="7.0.10" />
+
             <RadioButton
                 android:id="@+id/rb_706"
-                style="@style/RadioButton"
+                style="@style/radioButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="0dp"
                 android:text="7.0.6" />
 
             <RadioButton
                 android:id="@+id/rb_705"
-                style="@style/RadioButton"
+                style="@style/radioButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="7.0.5" />
 
             <RadioButton
                 android:id="@+id/rb_704"
-                style="@style/RadioButton"
+                style="@style/radioButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="0dp"
                 android:text="7.0.4" />
 
             <RadioButton
                 android:id="@+id/rb_703"
-                style="@style/RadioButton"
+                style="@style/radioButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="0dp"
                 android:text="7.0.3" />
         </info.hoang8f.android.segmented.SegmentedGroup>
 
+        <!--无障碍服务状态-->
+        <TextView
+            android:id="@+id/tv_service_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="无障碍服务状态(点击刷新)"
 
-        <Button
-            android:id="@+id/btn_start"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            android:text="开启无障碍"
-            android:textColor="#ffffff"
-            app:layout_constraintTop_toBottomOf="@id/sg_version_list"
-            tools:ignore="MissingConstraints" />
+            app:layout_constraintLeft_toLeftOf="@id/tv_choose_version"
+            app:layout_constraintTop_toBottomOf="@id/sg_version_list" />
 
-        <FrameLayout
-            android:id="@+id/fl_wechat"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/btn_start">
-
-            <TextView
-                android:id="@+id/tv_wechat"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:text="开抢微信红包"
-                android:textColor="#ffffff"
-                android:textSize="22sp" />
-
-            <com.suke.widget.SwitchButton
-                android:id="@+id/sw_wechat"
-                android:layout_width="60dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical|right"
-
-                tools:ignore="MissingConstraints" />
-        </FrameLayout>
-
-        <Button
-            android:id="@+id/btn_check"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            android:text="检测无障碍是否开启"
-            android:textColor="#ffffff"
-            app:layout_constraintLeft_toLeftOf="parent"
+        <TextView
+            android:id="@+id/tv_start"
+            style="@style/roundConfirmStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:padding="3dp"
+            android:text="开启无障服务"
+            app:layout_constraintBottom_toBottomOf="@id/tv_check"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fl_wechat" />
+            app:layout_constraintTop_toTopOf="@id/tv_service_state" />
 
         <TextView
             android:id="@+id/tv_check"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
+            android:layout_height="wrap_content"
             android:text="请检测无障碍是否开启"
-            android:textColor="#ffffff"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="@id/tv_choose_version"
+            app:layout_constraintTop_toBottomOf="@id/tv_service_state" />
+
+        <!--抢红包-->
+        <FrameLayout
+            android:id="@+id/fl_wechat"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="@id/tv_choose_version"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_check" />
+            app:layout_constraintTop_toBottomOf="@id/tv_check">
+
+            <TextView
+                android:id="@+id/tv_wechat"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="开抢微信红包"
+                android:textSize="18sp" />
+
+            <com.suke.widget.SwitchButton
+                android:id="@+id/sw_wechat"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|right" />
+        </FrameLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/ll_guide"
+            app:layout_constraintTop_toBottomOf="@id/fl_wechat">
+
+            <TextView
+                android:id="@+id/tv_record"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </ScrollView>
 
         <LinearLayout
+            android:id="@+id/ll_guide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@id/tv_git_version">
 
@@ -169,18 +205,6 @@
                 android:text="4.开始抢红包" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_version"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:text='@{"-VC"+String.valueOf(config.VERSION_CODE)+"-"}'
-            android:textColor="#000000"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/tv_git_version"
@@ -192,5 +216,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_version"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text='@{"-VC"+String.valueOf(config.VERSION_CODE)+"-"}'
+            android:textColor="#000000"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
     </android.support.constraint.ConstraintLayout>
+
 </layout>

@@ -11,6 +11,6 @@
         android:layout_height="50dp"
         android:gravity="center"
         tools:ignore="MissingConstraints"
-        android:background="@color/colorAccent"/>
+        android:background="@color/colorPrimary"/>
 
 </android.support.constraint.ConstraintLayout>

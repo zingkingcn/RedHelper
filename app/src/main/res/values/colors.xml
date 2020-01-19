@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorSecond">#ef6c00</color>
+    <color name="colorThird">#ffa000</color>
+    <color name="colorFourth">#fdd835</color>
+
+    <color name="colorPrimary">#bf360c</color>
+    <color name="colorPrimaryLight">#f9683a</color>
+    <color name="colorPrimaryDark">#bf360c</color>
+
+    <!--<color name="colorSecondary">#039be5</color>&lt;!&ndash;对比颜色&ndash;&gt;-->
+    <!--<color name="colorSecondaryLight">#63ccff</color>-->
+    <!--<color name="colorSecondaryDark">#006db3</color>-->
+
+    <color name="colorPrimaryLightLight">#ff9a67</color>
+    <color name="colorBlackDisable">#282828</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimaryBlack">#424242</color>
+    <color name="colorPrimaryBlackDark">#121212</color>
+    <color name="colorGrey">#484848</color>
+    <color name="colorGreyLight">#dddddd</color>
+    <color name="colorGreyPress">#ababab</color>
+
+    <color name="colorHintLight">#909090</color>
+    <color name="colorHintDark">#282828</color>
+    <color name="colorNone">#00ffffff</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorWhiteDeep">#f5f5f5</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorRed">#FFD32F2F</color>
+    <color name="colorGreen">#FF388E3C</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="colorWechat">#08c261</color>
+    <color name="colorAliPay">#1b82d1</color>
+
 </resources>
