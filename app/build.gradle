@@ -11,7 +11,7 @@ android {
         minSdkVersion 18
         targetSdkVersion 28
         versionCode 3
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField 'int', 'TYPE','1'
@@ -104,8 +104,8 @@ android.applicationVariants.all { variant ->
     variant.outputs.each { output ->
         variant.productFlavors.each { product ->
             buildName = product.name //获取渠道名字
+            output.outputFileName = "RedHelper_V${versionName}_VC${versionCode}_${time}_${variant.buildType.name}.apk"
         }
-        output.outputFileName = "${buildName}RedHelper.V${versionName}_VC${versionCode}_${time}_${variant.buildType.name}.apk"
     }
 //    }
 }
