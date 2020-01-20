@@ -113,7 +113,6 @@ public class MainActivity extends Activity {
 //            intent.addCategory(Intent.CATEGORY_HOME);
 //            startActivity(intent);
 
-            initNotificationBar();
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             startActivity(intent);
             Intent service = new Intent(this, RedPacketService.class);
@@ -171,7 +170,7 @@ public class MainActivity extends Activity {
             tvCheck.setTextColor(ContextCompat.getColor(this, R.color.colorRed));
             return false;
         } else {
-            tvCheck.setText("无障碍服务已开启");
+            tvCheck.setText("已开启");
             tvCheck.setTextColor(ContextCompat.getColor(this, R.color.colorGreen));
             return true;
         }
@@ -238,7 +237,7 @@ public class MainActivity extends Activity {
         Notification.Builder builder = new Notification.Builder(this);
         builder.setSmallIcon(R.mipmap.logo3)
                 .setAutoCancel(false)
-                .setContentText("我一直在努力抢红包...")
+                .setContentText("在下奋力抢红包中...")
                 .setContentTitle("主上");
         Notification notification = builder.build();
         //初始化通知
