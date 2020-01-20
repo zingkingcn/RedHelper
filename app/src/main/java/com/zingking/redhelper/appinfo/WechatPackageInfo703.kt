@@ -7,7 +7,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
-import com.zingking.redhelper.ReturnHomeEvent
+import com.zingking.redhelper.events.ReturnHomeEvent
 import org.greenrobot.eventbus.EventBus
 
 /**

@@ -1,7 +1,9 @@
 package com.zingking.redhelper;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -15,8 +17,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -35,19 +39,27 @@ import com.zingking.redhelper.appinfo.WechatPackageInfo704;
 import com.zingking.redhelper.appinfo.WechatPackageInfo705;
 import com.zingking.redhelper.appinfo.WechatPackageInfo706;
 import com.zingking.redhelper.databinding.ActivityMainBinding;
+import com.zingking.redhelper.events.ReceiveRedPackageEvent;
+import com.zingking.redhelper.events.ReturnHomeEvent;
 import com.zingking.redhelper.service.RedPacketService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
 import static com.zingking.redhelper.Utils.isServiceRunning;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements EasyPermissions.PermissionCallbacks{
     // https://www.cnblogs.com/roccheung/p/5797270.html
     // https://www.cnblogs.com/huolongluo/p/6120946.html
     private static final String TAG = "MainActivity";
+    private final int PERMISSION_CODE_STORAGE = 0x0001;
     ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -64,7 +76,7 @@ public class MainActivity extends Activity {
     private SegmentedGroup sgVersionList;
     private TextView tvChooseVersion, tvCheck, tvStart, tvServiceState;
     private RadioButton rb703, rb704, rb705, rb706, rb7010;
-    private CheckBox cbHome;
+    private CheckBox cbHome, cbLock;
     private NotificationManager notificationManager;
 
     @Override
@@ -107,18 +119,38 @@ public class MainActivity extends Activity {
             }
         });
         tvStart.setOnClickListener(v -> {
-            //模拟Home键操作
-//            Intent intent = new Intent(Intent.ACTION_MAIN);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            intent.addCategory(Intent.CATEGORY_HOME);
-//            startActivity(intent);
-
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             startActivity(intent);
             Intent service = new Intent(this, RedPacketService.class);
             bindService(service, connection, Service.BIND_AUTO_CREATE);
         });
-        swWechat.setOnTouchListener((v, event) -> !hadChooseVersion());
+        cbLock.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (EasyPermissions.hasPermissions(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        return false;
+                    } else {
+                        EasyPermissions.requestPermissions(
+                                MainActivity.this,
+                                "需要存储权限才能锁屏抢红包",
+                                PERMISSION_CODE_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        );
+                        return true;
+                    }
+                } else {
+                    return false;
+                }
+            }
+            return false;
+        });
+        swWechat.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                return !hadChooseVersion();
+            }
+            return false;
+        });
         swWechat.setOnCheckedChangeListener((view, isChecked) -> {
             boolean isRunning = isServiceRunning(this, RedPacketService.class.getName());
             Log.i(TAG, "RedPacketService isRunning = " + isRunning);
@@ -214,6 +246,7 @@ public class MainActivity extends Activity {
 
     private void initView() {
         cbHome = (CheckBox) findViewById(R.id.cb_home);
+        cbLock = (CheckBox) findViewById(R.id.cb_lock);
         tvStart = (TextView) findViewById(R.id.tv_start);
         tvServiceState = (TextView) findViewById(R.id.tv_service_state);
         swWechat = (SwitchButton) findViewById(R.id.sw_wechat);
@@ -240,11 +273,6 @@ public class MainActivity extends Activity {
                 .setContentText("在下奋力抢红包中...")
                 .setContentTitle("主上");
         Notification notification = builder.build();
-        //初始化通知
-//        notification.icon = R.mipmap.ic_launcher;
-//        RemoteViews contentView = new RemoteViews(getPackageName(),
-//                R.layout.activity_main_1);
-//        notification.contentView = contentView;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("com.zingking.redhelper",
                     TAG, NotificationManager.IMPORTANCE_DEFAULT);
@@ -261,7 +289,39 @@ public class MainActivity extends Activity {
         EventBus.getDefault().unregister(this);
     }
 
-    @Subscribe
+    /**
+     * 权限请求成功，easyPermissions 回调
+     */
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+
+    }
+    /**
+     * 权限请求失败，easyPermissions 回调
+     */
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        String title = "权限被拒绝";
+        String rationale = "请打开存储权限以保证应用正常运行";
+        if (perms.contains(Manifest.permission.READ_EXTERNAL_STORAGE)
+                || perms.contains(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            title = "存储权限已经被您拒绝";
+            rationale = "请打开存储权限以保证锁屏抢红包正常使用";
+        }
+        //如果有一些权限被永久的拒绝, 就需要转跳到 设置-->应用-->对应的App下去开启权限
+        new AppSettingsDialog.Builder(this)
+                .setTitle(title)
+                .setRationale(rationale)
+                .build()
+                .show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void openHome(ReturnHomeEvent event) {
         if (cbHome.isChecked()) {
             //模拟Home键操作
@@ -269,6 +329,18 @@ public class MainActivity extends Activity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addCategory(Intent.CATEGORY_HOME);
             startActivity(intent);
+        }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveRedPackage(ReceiveRedPackageEvent event) {
+        if (cbLock.isChecked()){
+            KeyguardManager keyManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+            if (keyManager.isKeyguardLocked()) {
+                Intent intent = new Intent(this, MessageActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("msg", "微信收到一个红包，点我抢");
+                startActivity(intent);
+            }
         }
     }
 

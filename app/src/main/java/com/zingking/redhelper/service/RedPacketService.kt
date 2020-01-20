@@ -13,6 +13,8 @@ import com.zingking.redhelper.appinfo.IAppListener
 import com.zingking.redhelper.appinfo.INodeInfoListener
 import com.zingking.redhelper.appinfo.IPackageInfo
 import com.zingking.redhelper.appinfo.PackageInfoHelper
+import com.zingking.redhelper.events.ReceiveRedPackageEvent
+import org.greenrobot.eventbus.EventBus
 
 /**
  * Copyright © 2018 www.zingking.cn All Rights Reserved.
@@ -38,14 +40,15 @@ class RedPacketService : AccessibilityService(), INodeInfoListener {
                 when (eventType) {
                     AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED -> { // 1.接收到通知：打开微信app
                         packageInfo.openApp(IAppListener {
-                            // TODO event bus 发送收到红包消息，由首页去判断和打开 MessageActivity
-                            val keyManager: KeyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-                            if (keyManager.isKeyguardLocked) { // 锁屏打开app
-                                var intent: Intent = Intent(this, MessageActivity::class.java)
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                intent.putExtra("msg", "微信收到一个红包，点我抢")
-                                startActivity(intent)
-                            }
+                            EventBus.getDefault().post(ReceiveRedPackageEvent())
+//                            // TODO event bus 发送收到红包消息，由首页去判断和打开 MessageActivity
+//                            val keyManager: KeyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+//                            if (keyManager.isKeyguardLocked) { // 锁屏打开app
+//                                var intent: Intent = Intent(this, MessageActivity::class.java)
+//                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                                intent.putExtra("msg", "微信收到一个红包，点我抢")
+//                                startActivity(intent)
+//                            }
                         })
                     }
                     AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> { // 2.打开了微信app：执行了上面的 1 后触发
