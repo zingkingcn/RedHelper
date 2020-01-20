@@ -191,7 +191,6 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                 default:
             }
         });
-
     }
 
     private boolean checkAccess() {

@@ -22,7 +22,8 @@
             android:name=".MessageActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme"/>
 
         <activity
             android:name=".MainActivity"
