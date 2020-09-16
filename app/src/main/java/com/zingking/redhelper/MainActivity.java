@@ -34,6 +34,7 @@ import com.suke.widget.SwitchButton;
 import com.zingking.redhelper.appinfo.IPackageInfo;
 import com.zingking.redhelper.appinfo.PackageInfoHelper;
 import com.zingking.redhelper.appinfo.WechatPackageInfo7010;
+import com.zingking.redhelper.appinfo.WechatPackageInfo7018;
 import com.zingking.redhelper.appinfo.WechatPackageInfo703;
 import com.zingking.redhelper.appinfo.WechatPackageInfo704;
 import com.zingking.redhelper.appinfo.WechatPackageInfo705;
@@ -75,7 +76,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
     private IPackageInfo iPackageInfo;
     private SegmentedGroup sgVersionList;
     private TextView tvChooseVersion, tvCheck, tvStart, tvServiceState;
-    private RadioButton rb703, rb704, rb705, rb706, rb7010;
+    private RadioButton rb703, rb704, rb705, rb706, rb7010, rb7018;
     private CheckBox cbHome, cbLock;
     private NotificationManager notificationManager;
 
@@ -170,9 +171,13 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         rb705.setOnTouchListener(rbTouchListener);
         rb706.setOnTouchListener(rbTouchListener);
         rb7010.setOnTouchListener(rbTouchListener);
+        rb7018.setOnTouchListener(rbTouchListener);
         sgVersionList.setOnCheckedChangeListener((group, checkedId) -> {
             tvChooseVersion.clearAnimation();
             switch (checkedId) {
+                case R.id.rb_7018:
+                    iPackageInfo = new WechatPackageInfo7018();
+                    break;
                 case R.id.rb_7010:
                     iPackageInfo = new WechatPackageInfo7010();
                     break;
@@ -257,6 +262,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         rb705 = findViewById(R.id.rb_705);
         rb706 = findViewById(R.id.rb_706);
         rb7010 = findViewById(R.id.rb_7010);
+        rb7018 = findViewById(R.id.rb_7018);
         String buildVersion = getString(R.string.build_revision);
         TextView tvGitVersion = findViewById(R.id.tv_git_version);
         tvGitVersion.setText("VC" + BuildConfig.VERSION_CODE + "_" + buildVersion);

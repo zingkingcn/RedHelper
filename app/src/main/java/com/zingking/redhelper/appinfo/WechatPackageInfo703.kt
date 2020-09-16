@@ -19,7 +19,9 @@ import org.greenrobot.eventbus.EventBus
 
 open class WechatPackageInfo703 : IPackageInfo {
     open val CHAT_UI_CLASS = "com.tencent.mm.ui.LauncherUI" // 微信聊天界面
+    open val CHAT_UI_CLASS_2 = "com.tencent.mm/.ui.LauncherUI" // 微信聊天界面
     open val MONEY_UI_CLASS = "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyNotHookReceiveUI" // 抢红包界面,有开字的那个弹框
+    open val MONEY_UI_CLASS_2 = "com.tencent.mm/.plugin.luckymoney.ui.LuckyMoneyNotHookReceiveUI" // 抢红包界面,有开字的那个弹框
     open val OPEN_BUTTON_ID = "com.tencent.mm:id/cyf" // "开"按钮
     open val MONEY_UI_DETAIL_CLASS = "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyDetailUI" // 红包详情页面
     /**
@@ -53,13 +55,13 @@ open class WechatPackageInfo703 : IPackageInfo {
             return
         }
         when (className.toString()) {
-            CHAT_UI_CLASS -> { // 微信聊天页面
+            CHAT_UI_CLASS_2, CHAT_UI_CLASS -> { // 微信聊天页面
                 val redPacket = filterRedPacket(rootInActiveWindow)
                 redPacket?.let {
                     clickPacket(redPacket)
                 }
             }
-            MONEY_UI_CLASS -> { // 开红包页面
+            MONEY_UI_CLASS_2, MONEY_UI_CLASS -> { // 开红包页面
                 clickViewById(OPEN_BUTTON_ID)
             }
             MONEY_UI_DETAIL_CLASS -> { // 红包详情页面
