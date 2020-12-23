@@ -57,6 +57,14 @@
 
 
             <RadioButton
+                android:id="@+id/rb_7021"
+                style="@style/radioButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="0dp"
+                android:text="7.0.21" />
+
+            <RadioButton
                 android:id="@+id/rb_7018"
                 style="@style/radioButtonStyle"
                 android:layout_width="wrap_content"
@@ -93,7 +101,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="0dp"
-                android:text="7.0.4" />
+                android:text="7.0.4"
+                android:visibility="gone" />
 
             <RadioButton
                 android:id="@+id/rb_703"

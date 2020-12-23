@@ -35,6 +35,7 @@ import com.zingking.redhelper.appinfo.IPackageInfo;
 import com.zingking.redhelper.appinfo.PackageInfoHelper;
 import com.zingking.redhelper.appinfo.WechatPackageInfo7010;
 import com.zingking.redhelper.appinfo.WechatPackageInfo7018;
+import com.zingking.redhelper.appinfo.WechatPackageInfo7021;
 import com.zingking.redhelper.appinfo.WechatPackageInfo703;
 import com.zingking.redhelper.appinfo.WechatPackageInfo704;
 import com.zingking.redhelper.appinfo.WechatPackageInfo705;
@@ -175,6 +176,9 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         sgVersionList.setOnCheckedChangeListener((group, checkedId) -> {
             tvChooseVersion.clearAnimation();
             switch (checkedId) {
+                case R.id.rb_7021:
+                    iPackageInfo = new WechatPackageInfo7021();
+                    break;
                 case R.id.rb_7018:
                     iPackageInfo = new WechatPackageInfo7018();
                     break;
