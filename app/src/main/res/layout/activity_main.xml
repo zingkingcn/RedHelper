@@ -55,6 +55,13 @@
             segmentedgroup:sc_corner_radius="10dp"
             segmentedgroup:sc_tint_color="@color/colorPrimary">
 
+            <RadioButton
+                android:id="@+id/rb_8000"
+                style="@style/radioButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="0dp"
+                android:text="8.0.00" />
 
             <RadioButton
                 android:id="@+id/rb_7021"
