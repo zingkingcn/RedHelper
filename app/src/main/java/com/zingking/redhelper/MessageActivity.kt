@@ -32,7 +32,7 @@ class MessageActivity : Activity() {
         tv_msg.text = msg ?: "收到一个红包"
         tv_msg.setOnClickListener {
             Log.i("kai ", "onclick")
-            //先解锁系统自带锁屏服务，放在锁屏界面里面
+            // 先解锁系统自带锁屏服务，放在锁屏界面里面
             val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
             keyguardManager.newKeyguardLock("unclock").disableKeyguard() //解锁
             finish()
