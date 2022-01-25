@@ -265,7 +265,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         rb8018 = findViewById(R.id.rb_8018);
         String buildVersion = getString(R.string.build_revision);
         TextView tvGitVersion = findViewById(R.id.tv_git_version);
-        tvGitVersion.setText("VC" + BuildConfig.VERSION_CODE + "_" + buildVersion);
+        tvGitVersion.setText("Power by ZingKing & VC" + BuildConfig.VERSION_CODE + "_" + buildVersion);
     }
 
     public void initNotificationBar() {
