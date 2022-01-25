@@ -2,12 +2,7 @@ package com.zingking.redhelper;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.KeyguardManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.Service;
+import android.app.*;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -29,32 +24,20 @@ import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.suke.widget.SwitchButton;
-import com.zingking.redhelper.appinfo.IPackageInfo;
-import com.zingking.redhelper.appinfo.PackageInfoHelper;
-import com.zingking.redhelper.appinfo.WechatPackageInfo7010;
-import com.zingking.redhelper.appinfo.WechatPackageInfo7018;
-import com.zingking.redhelper.appinfo.WechatPackageInfo7021;
-import com.zingking.redhelper.appinfo.WechatPackageInfo703;
-import com.zingking.redhelper.appinfo.WechatPackageInfo704;
-import com.zingking.redhelper.appinfo.WechatPackageInfo705;
-import com.zingking.redhelper.appinfo.WechatPackageInfo706;
-import com.zingking.redhelper.appinfo.WechatPackageInfo8000;
+import com.zingking.redhelper.appinfo.*;
 import com.zingking.redhelper.databinding.ActivityMainBinding;
 import com.zingking.redhelper.events.ReceiveRedPackageEvent;
 import com.zingking.redhelper.events.ReturnHomeEvent;
 import com.zingking.redhelper.service.RedPacketService;
-
+import info.hoang8f.android.segmented.SegmentedGroup;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.List;
-
-import info.hoang8f.android.segmented.SegmentedGroup;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
+
+import java.util.List;
 
 import static com.zingking.redhelper.Utils.isServiceRunning;
 
@@ -78,7 +61,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
     private IPackageInfo iPackageInfo;
     private SegmentedGroup sgVersionList;
     private TextView tvChooseVersion, tvCheck, tvStart, tvServiceState;
-    private RadioButton rb703, rb704, rb705, rb706, rb7010, rb7018;
+    private RadioButton rb703, rb704, rb705, rb706, rb7010, rb7018, rb7021, rb8000, rb8018;
     private CheckBox cbHome, cbLock;
     private NotificationManager notificationManager;
 
@@ -174,9 +157,15 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         rb706.setOnTouchListener(rbTouchListener);
         rb7010.setOnTouchListener(rbTouchListener);
         rb7018.setOnTouchListener(rbTouchListener);
+        rb7021.setOnTouchListener(rbTouchListener);
+        rb8000.setOnTouchListener(rbTouchListener);
+        rb8018.setOnTouchListener(rbTouchListener);
         sgVersionList.setOnCheckedChangeListener((group, checkedId) -> {
             tvChooseVersion.clearAnimation();
             switch (checkedId) {
+                case R.id.rb_8018:
+                    iPackageInfo = new WechatPackageInfo8018();
+                    break;
                 case R.id.rb_8000:
                     iPackageInfo = new WechatPackageInfo8000();
                     break;
@@ -271,6 +260,9 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         rb706 = findViewById(R.id.rb_706);
         rb7010 = findViewById(R.id.rb_7010);
         rb7018 = findViewById(R.id.rb_7018);
+        rb7021 = findViewById(R.id.rb_7021);
+        rb8000 = findViewById(R.id.rb_8000);
+        rb8018 = findViewById(R.id.rb_8018);
         String buildVersion = getString(R.string.build_revision);
         TextView tvGitVersion = findViewById(R.id.tv_git_version);
         tvGitVersion.setText("VC" + BuildConfig.VERSION_CODE + "_" + buildVersion);

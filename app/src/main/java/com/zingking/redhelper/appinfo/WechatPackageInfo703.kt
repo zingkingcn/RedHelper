@@ -185,8 +185,9 @@ open class WechatPackageInfo703 : IPackageInfo {
         }
         parent.text?.let {
             if ("已领取" == (parent.text.toString())
-                    || "已被领完" == (parent.text.toString())
-                    || "以过期" == (parent.text.toString())) {
+                || "已被领完" == (parent.text.toString())
+                || "已领取" in parent.text.toString()
+                || "以过期" == (parent.text.toString())) {
                 Log.i(TAG, "已领取")
                 return true
             }
