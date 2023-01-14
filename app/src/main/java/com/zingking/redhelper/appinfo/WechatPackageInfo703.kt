@@ -51,6 +51,7 @@ open class WechatPackageInfo703 : IPackageInfo {
     override fun grabPacket() {
         val rootInActiveWindow: AccessibilityNodeInfo = iNodeInfoListener!!.getNodeInfo() ?: return
         val className: CharSequence? = event!!.className
+        Log.i(TAG, "grabPacket: $className")
         if (TextUtils.isEmpty(className)){
             return
         }
@@ -88,15 +89,16 @@ open class WechatPackageInfo703 : IPackageInfo {
     }
 
     private fun filterRedPacket(nodeInfo: AccessibilityNodeInfo): AccessibilityNodeInfo? {
+        Log.d(TAG, "filterRedPacket() called with: nodeInfo = $nodeInfo")
         var result: AccessibilityNodeInfo? = null
         if (nodeInfo.childCount == 0) {
             nodeInfo.text?.let {
                 if ("微信红包" == (nodeInfo.text.toString())) {
                     //注意，需要找到一个可以点击的View
-                    Log.i("demo", "Click" + ",isClick:" + nodeInfo.isClickable())
+                    Log.i("${TAG}demo", "Click" + ",isClick:" + nodeInfo.isClickable())
                     var parent: AccessibilityNodeInfo? = nodeInfo.parent
                     while (parent != null) {
-                        Log.i("demo", "parent isClick:" + parent.isClickable())
+                        Log.i("${TAG}demo", "parent isClick:" + parent.isClickable())
                         if (parent.isClickable) {
                             if (!hasFinish(parent)) {
                                 result = parent
@@ -166,6 +168,7 @@ open class WechatPackageInfo703 : IPackageInfo {
     }
 
     private fun clickViewById(sId: String) {
+        Log.d(TAG, "clickViewById() called with: sId = $sId")
         handler.removeMessages(SCREEN_LOCK_CLICK_TAG)
         val rootInActiveWindow = iNodeInfoListener!!.getNodeInfo() ?: return
         val infosByViewId = rootInActiveWindow.findAccessibilityNodeInfosByViewId(sId)

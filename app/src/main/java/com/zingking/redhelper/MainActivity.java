@@ -61,7 +61,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
     private IPackageInfo iPackageInfo;
     private SegmentedGroup sgVersionList;
     private TextView tvChooseVersion, tvCheck, tvStart, tvServiceState;
-    private RadioButton rb703, rb704, rb705, rb706, rb7010, rb7018, rb7021, rb8000, rb8018;
+    private RadioButton rb703, rb704, rb705, rb706, rb7010, rb7018, rb7021, rb8000, rb8018, rb8032;
     private CheckBox cbHome, cbLock;
     private NotificationManager notificationManager;
 
@@ -160,9 +160,13 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         rb7021.setOnTouchListener(rbTouchListener);
         rb8000.setOnTouchListener(rbTouchListener);
         rb8018.setOnTouchListener(rbTouchListener);
+        rb8032.setOnTouchListener(rbTouchListener);
         sgVersionList.setOnCheckedChangeListener((group, checkedId) -> {
             tvChooseVersion.clearAnimation();
             switch (checkedId) {
+                case R.id.rb_8032:
+                    iPackageInfo = new WechatPackageInfo8032();
+                    break;
                 case R.id.rb_8018:
                     iPackageInfo = new WechatPackageInfo8018();
                     break;
@@ -191,6 +195,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                     iPackageInfo = new WechatPackageInfo703();
                     break;
                 default:
+                    break;
             }
         });
     }
@@ -263,6 +268,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         rb7021 = findViewById(R.id.rb_7021);
         rb8000 = findViewById(R.id.rb_8000);
         rb8018 = findViewById(R.id.rb_8018);
+        rb8032 = findViewById(R.id.rb_8032);
         String buildVersion = getString(R.string.build_revision);
         TextView tvGitVersion = findViewById(R.id.tv_git_version);
         tvGitVersion.setText("Power by ZingKing & VC" + BuildConfig.VERSION_CODE + "_" + buildVersion);
