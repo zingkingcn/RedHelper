@@ -59,6 +59,7 @@ open class WechatPackageInfo703 : IPackageInfo {
             CHAT_UI_CLASS_2, CHAT_UI_CLASS -> { // 微信聊天页面
                 val redPacket = filterRedPacket(rootInActiveWindow)
                 redPacket?.let {
+                    // 点击红包
                     clickPacket(redPacket)
                 }
             }
@@ -88,6 +89,9 @@ open class WechatPackageInfo703 : IPackageInfo {
         handler.sendMessageDelayed(message, SCREEN_LOCK_CLICK_INTERVAL)
     }
 
+    /**
+     * 过滤聊天信息页面中的红包
+     */
     private fun filterRedPacket(nodeInfo: AccessibilityNodeInfo): AccessibilityNodeInfo? {
         Log.d(TAG, "filterRedPacket() called with: nodeInfo = $nodeInfo")
         var result: AccessibilityNodeInfo? = null
@@ -111,7 +115,7 @@ open class WechatPackageInfo703 : IPackageInfo {
             }
         } else {
             for (i in 0 until nodeInfo.childCount) {
-                val child = nodeInfo.getChild(i)
+                val child:AccessibilityNodeInfo? = nodeInfo.getChild(i)
                 if (child != null) {
                     result = filterRedPacket(child)
                     if (result != null) {
@@ -154,34 +158,84 @@ open class WechatPackageInfo703 : IPackageInfo {
         if (frameLayout.childCount == 0) {
             return
         }
-        val listView: AccessibilityNodeInfo = frameLayout.getChild(0) // 聊天树中的listView
-        if (listView.childCount == 0) {
+        val listView: AccessibilityNodeInfo? = frameLayout.getChild(0) // 聊天树中的listView
+        if (listView?.childCount == 0) {
             return
         }
-        val lastChild = listView.getChild(listView.childCount - 1)
+        val lastChild:AccessibilityNodeInfo? = listView?.getChild(listView.childCount - 1)
+        if (lastChild == null) {
+            return
+        }
         val redPacket = filterRedPacket(lastChild)
         redPacket?.let {
             clickPacket(redPacket)
         }
-//            }
-//        }
     }
 
+    private var currTryCount = 0
+    // 有"开"的那个小弹窗，点击“开”的重试次数
+    private val OPEN_BUTTON_TRY_COUNT = 10
+    // 有"开"的那个小弹窗，点击“开”的重试间隔毫秒数
+    private var OPEN_BUTTON_TRY_INTERVAL = 300L
+
     private fun clickViewById(sId: String) {
+        currTryCount++
         Log.d(TAG, "clickViewById() called with: sId = $sId")
         handler.removeMessages(SCREEN_LOCK_CLICK_TAG)
-        val rootInActiveWindow = iNodeInfoListener!!.getNodeInfo() ?: return
-        val infosByViewId = rootInActiveWindow.findAccessibilityNodeInfosByViewId(sId)
+        val rootInActiveWindow:AccessibilityNodeInfo? = iNodeInfoListener!!.getNodeInfo()
+        Log.d(TAG, "clickViewById() called with: rootInActiveWindow = $rootInActiveWindow")
+        val infosByViewId = rootInActiveWindow?.findAccessibilityNodeInfosByViewId(sId)
+        Log.d(TAG, "clickViewById() called with: infosByViewId = $infosByViewId")
+        if (rootInActiveWindow == null || infosByViewId == null || infosByViewId.isEmpty()) {
+            Log.d(TAG, "clickViewById() called with: currTryCount = $currTryCount")
+            if (currTryCount > OPEN_BUTTON_TRY_COUNT) {
+                return
+            }
+            Thread.sleep(OPEN_BUTTON_TRY_INTERVAL)
+            clickViewById(sId)
+            return
+        }
         for (node: AccessibilityNodeInfo in infosByViewId) {
             Log.i(TAG, "clickViewById -> " + "开红包")
             node.performAction(AccessibilityNodeInfo.ACTION_CLICK)
         }
+//        recycle(rootInActiveWindow)
+//        Thread.sleep(1000)
+//        recycle(iNodeInfoListener!!.getNodeInfo())
     }
 
+    /**
+     * 测试方法
+     */
+    private fun recycle(nodeInfo: AccessibilityNodeInfo?){
+        Log.d(TAG, "recycle() called with: nodeInfo = $nodeInfo")
+        if (nodeInfo == null) {
+            return
+        }
+        if (nodeInfo.childCount == 0) {
+            Log.d(TAG, "recycle() called with: nodeInfo = $nodeInfo")
+        }else{
+            for (index in 0 until  nodeInfo.childCount) {
+                val child:AccessibilityNodeInfo? = nodeInfo.getChild(index)
+                if (child != null) {
+                    recycle(child)
+                }
+            }
+        }
+
+    }
+
+    /**
+     * 判断红包是否已经领取过
+     */
     private fun hasFinish(parent: AccessibilityNodeInfo): Boolean {
         if (parent.childCount > 0) {
             for (i in 0..parent.childCount - 1) {
-                if (hasFinish(parent.getChild(i))) {
+                val child: AccessibilityNodeInfo? = parent.getChild(i)
+                if (child == null) {
+                    return false
+                }
+                if (hasFinish(child)) {
                     return true
                 }
             }
@@ -190,7 +244,7 @@ open class WechatPackageInfo703 : IPackageInfo {
             if ("已领取" == (parent.text.toString())
                 || "已被领完" == (parent.text.toString())
                 || "已领取" in parent.text.toString()
-                || "以过期" == (parent.text.toString())) {
+                || "已过期" == (parent.text.toString())) {
                 Log.i(TAG, "已领取")
                 return true
             }

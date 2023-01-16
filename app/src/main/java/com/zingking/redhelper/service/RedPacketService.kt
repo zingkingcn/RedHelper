@@ -39,6 +39,7 @@ class RedPacketService : AccessibilityService(), INodeInfoListener {
                 packageInfo.iNodeInfoListener = this
                 when (eventType) {
                     AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED -> { // 1.接收到通知：打开微信app
+                        // 判断通知是否包含指定内容
                         packageInfo.openApp(IAppListener {
                             EventBus.getDefault().post(ReceiveRedPackageEvent())
 //                            // TODO event bus 发送收到红包消息，由首页去判断和打开 MessageActivity
